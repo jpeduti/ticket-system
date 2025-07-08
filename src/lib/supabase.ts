@@ -1,11 +1,11 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
 // Obtener las variables de entorno
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl: string | undefined = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey: string | undefined = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 // Detectar si estamos en modo demo
-const isMockMode = !supabaseUrl || 
+const isMockMode: boolean = !supabaseUrl || 
                    supabaseUrl === 'TU_SUPABASE_URL' || 
                    !supabaseAnonKey || 
                    supabaseAnonKey === 'TU_SUPABASE_ANON_KEY'
@@ -20,9 +20,9 @@ if (isMockMode) {
 }
 
 // Crear cliente solo si no estamos en modo demo
-export const supabase = isMockMode 
+export const supabase: SupabaseClient | null = isMockMode 
   ? null 
-  : createClient(supabaseUrl, supabaseAnonKey)
+  : createClient(supabaseUrl!, supabaseAnonKey!)
 
 // Exportar el estado del modo
-export const isDemo = isMockMode 
+export const isDemo: boolean = isMockMode 

@@ -1,5 +1,7 @@
+import type { Client, Ticket, MockUser, ClientUser } from '@/types'
+
 // Datos de prueba para el sistema de tickets
-export const mockClients = [
+export const mockClients: Client[] = [
   {
     id: 1,
     name: 'Juan Pérez',
@@ -52,7 +54,7 @@ export const mockClients = [
   }
 ]
 
-export const mockTickets = [
+export const mockTickets: Ticket[] = [
   {
     id: 1,
     title: 'Sistema de facturación no genera PDFs',
@@ -105,70 +107,107 @@ export const mockTickets = [
   },
   {
     id: 5,
-    title: 'Optimización de rendimiento en consultas',
-    description: 'Las consultas a la base de datos están tardando mucho tiempo. Necesitamos optimizar las queries más lentas y revisar los índices.',
+    title: 'Optimización de base de datos',
+    description: 'Las consultas están siendo muy lentas en horas pico. Necesitamos optimizar las consultas más pesadas y revisar los índices.',
     status: 'in_progress',
     priority: 'high',
     client_id: 4,
     assigned_to: 'user-789',
-    created_at: '2024-06-28T13:45:00Z',
-    updated_at: '2024-07-01T10:20:00Z',
+    created_at: '2024-07-01T15:45:00Z',
+    updated_at: '2024-07-03T09:20:00Z',
     client: mockClients[3],
     assigned_user: { email: 'dba@empresa.com' }
   },
   {
     id: 6,
-    title: 'Integración con API de terceros',
-    description: 'Implementar integración con la API de pagos de Stripe para procesar pagos en línea de forma segura.',
+    title: 'Integración con API externa',
+    description: 'Implementar integración con la API de pagos para automatizar el proceso de facturación y cobro.',
     status: 'open',
     priority: 'medium',
     client_id: 5,
     assigned_to: null,
-    created_at: '2024-06-25T16:30:00Z',
-    updated_at: '2024-06-25T16:30:00Z',
+    created_at: '2024-07-02T08:15:00Z',
+    updated_at: '2024-07-02T08:15:00Z',
     client: mockClients[4]
   },
   {
     id: 7,
-    title: 'Backup automático no funciona',
-    description: 'El sistema de backup automático falló ayer por la noche. Necesitamos revisar la configuración y asegurar que los backups se realicen correctamente.',
+    title: 'Problema con envío de emails',
+    description: 'Los emails de notificación no se están enviando. Los usuarios no reciben confirmaciones de sus acciones.',
     status: 'open',
     priority: 'high',
     client_id: 2,
-    assigned_to: null,
-    created_at: '2024-07-03T07:15:00Z',
-    updated_at: '2024-07-03T07:15:00Z',
-    client: mockClients[1]
+    assigned_to: 'user-101',
+    created_at: '2024-07-03T12:30:00Z',
+    updated_at: '2024-07-03T12:30:00Z',
+    client: mockClients[1],
+    assigned_user: { email: 'support@empresa.com' }
   },
   {
     id: 8,
-    title: 'Actualización de diseño responsive',
-    description: 'Mejorar el diseño responsive de la aplicación para que funcione mejor en dispositivos móviles y tablets.',
+    title: 'Actualización de seguridad',
+    description: 'Aplicar las últimas actualizaciones de seguridad y parches críticos al sistema.',
     status: 'closed',
-    priority: 'low',
+    priority: 'high',
     client_id: 3,
-    assigned_to: 'user-321',
-    created_at: '2024-05-20T12:00:00Z',
-    updated_at: '2024-06-15T14:30:00Z',
+    assigned_to: 'user-202',
+    created_at: '2024-06-28T16:20:00Z',
+    updated_at: '2024-07-01T14:45:00Z',
     client: mockClients[2],
-    assigned_user: { email: 'frontend@empresa.com' }
+    assigned_user: { email: 'security@empresa.com' }
   }
 ]
 
-// Usuario mock para autenticación
-export const mockUser = {
-  id: 'mock-user-123',
-  email: 'demo@sistema-tickets.com',
+// Usuarios mock para autenticación
+export const mockAdminUser: MockUser = {
+  id: 'mock-admin-123',
+  email: 'admin@sistema-tickets.com',
+  role: 'admin',
   user_metadata: {
-    name: 'Usuario Demo'
+    name: 'Usuario Admin'
   }
 }
 
-// Función para simular delay de red
-export const delay = (ms = 1000) => new Promise(resolve => setTimeout(resolve, ms))
+export const mockClientUsers: ClientUser[] = [
+  {
+    id: 'mock-client-1',
+    email: 'juan.perez@empresa-a.com',
+    role: 'client',
+    client_id: 1,
+    client_data: mockClients[0],
+    user_metadata: {
+      name: 'Juan Pérez'
+    }
+  },
+  {
+    id: 'mock-client-2', 
+    email: 'maria.garcia@techcorp.com',
+    role: 'client',
+    client_id: 2,
+    client_data: mockClients[1],
+    user_metadata: {
+      name: 'María García'
+    }
+  },
+  {
+    id: 'mock-client-3',
+    email: 'carlos.lopez@freelancer.com', 
+    role: 'client',
+    client_id: 3,
+    client_data: mockClients[2],
+    user_metadata: {
+      name: 'Carlos López'
+    }
+  }
+]
 
-// Función para generar nuevo ID
-export const generateId = () => Math.max(...mockTickets.map(t => t.id), ...mockClients.map(c => c.id)) + 1
+// Para compatibilidad hacia atrás
+export const mockUser = mockAdminUser
 
-// Función para simular errores ocasionales
-export const shouldSimulateError = () => Math.random() < 0.05 // 5% de probabilidad de error 
+// Funciones utilitarias para el modo mock
+export const delay = (ms: number): Promise<void> => 
+  new Promise(resolve => setTimeout(resolve, ms))
+
+export const shouldSimulateError = (): boolean => Math.random() < 0.05 // 5% de probabilidad
+
+export const generateId = (): number => Date.now() + Math.floor(Math.random() * 1000) 
