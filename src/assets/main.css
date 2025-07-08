@@ -1,0 +1,235 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados para el sistema de tickets */
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-2 px-4 rounded-lg transition-colors;
+  }
+
+  .input-field {
+    @apply border border-border rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:border-transparent bg-background;
+  }
+
+  .card {
+    @apply bg-card text-card-foreground rounded-lg shadow-md p-6 border;
+  }
+}
+
+/* RESET COMPLETO para componentes Select, DropdownMenu y Dialog */
+@layer utilities {
+  /* Reset para eliminar cualquier estilo conflictivo */
+  [data-reka-select-content] *,
+  [data-reka-select-item] *,
+  .custom-select-content *,
+  .custom-select-item *,
+  [data-reka-dropdown-menu-content] *,
+  [data-reka-dropdown-menu-item] *,
+  .custom-dropdown-content *,
+  .custom-dropdown-item *,
+  [data-reka-dialog-content] *,
+  [data-reka-dialog-overlay] *,
+  .custom-dialog-content *,
+  .custom-dialog-overlay * {
+    box-sizing: border-box !important;
+  }
+  
+  /* Estilos específicos para items del select */
+  [data-reka-select-item],
+  .custom-select-item {
+    all: unset !important;
+    display: block !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 12px 32px 12px 12px !important;
+    background-color: white !important;
+    color: #1f2937 !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
+    cursor: pointer !important;
+    border-radius: 4px !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
+  
+  [data-reka-select-item]:hover,
+  .custom-select-item:hover {
+    background-color: #f3f4f6 !important;
+    color: #1f2937 !important;
+  }
+  
+  [data-reka-select-item][data-state="checked"],
+  .custom-select-item[data-state="checked"] {
+    background-color: #dbeafe !important;
+    color: #1e40af !important;
+  }
+  
+  /* Estilos específicos para items de dropdown menu */
+  [data-reka-dropdown-menu-item],
+  .custom-dropdown-item {
+    all: unset !important;
+    display: flex !important;
+    width: 100% !important;
+    min-height: 36px !important;
+    padding: 8px 12px !important;
+    background-color: white !important;
+    color: #374151 !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
+    cursor: pointer !important;
+    border-radius: 4px !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  
+  [data-reka-dropdown-menu-item]:hover,
+  .custom-dropdown-item:hover {
+    background-color: #f9fafb !important;
+    color: #111827 !important;
+  }
+  
+  [data-reka-dropdown-menu-item][data-variant="destructive"],
+  .custom-dropdown-item-destructive {
+    color: #dc2626 !important;
+  }
+  
+  [data-reka-dropdown-menu-item][data-variant="destructive"]:hover,
+  .custom-dropdown-item-destructive:hover {
+    background-color: #fef2f2 !important;
+    color: #dc2626 !important;
+  }
+  
+  /* Estilos específicos para Dialog */
+  [data-reka-dialog-content],
+  .custom-dialog-content {
+    background-color: white !important;
+    color: #111827 !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    z-index: 10000 !important;
+    position: fixed !important;
+    padding: 24px !important;
+  }
+  
+  [data-reka-dialog-overlay],
+  .custom-dialog-overlay {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    z-index: 9999 !important;
+    position: fixed !important;
+    inset: 0 !important;
+  }
+  
+  /* Content del select, dropdown y dialog */
+  [data-reka-select-content],
+  .custom-select-content,
+  [data-reka-dropdown-menu-content],
+  .custom-dropdown-content {
+    background-color: white !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 6px !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    z-index: 9999 !important;
+    position: fixed !important;
+    padding: 4px !important;
+  }
+}
+
+/* Fix para componentes Select - Evitar texto superpuesto */
+@layer components {
+  [data-slot="select-content"] {
+    @apply z-[1000] !important;
+  }
+  
+  [data-slot="select-item"] {
+    @apply block w-full text-left px-2 py-1.5 text-sm leading-5 min-h-[32px] !important;
+    line-height: 1.25rem !important;
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+  }
+  
+  [data-slot="select-item"] * {
+    @apply pointer-events-none;
+  }
+  
+  [data-slot="select-item"]:hover {
+    @apply bg-accent text-accent-foreground;
+  }
+  
+  [data-slot="select-item"][data-state="checked"] {
+    @apply bg-accent text-accent-foreground;
+  }
+  
+  /* Asegurar que el texto no se superponga */
+  [data-slot="select-item"] > span {
+    @apply flex items-center w-full;
+  }
+  
+  /* Estilo para el indicador de selección */
+  [data-slot="select-item"] > span:last-child {
+    @apply absolute right-2 flex h-3.5 w-3.5 items-center justify-center;
+  }
+}
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(222.2 84% 4.9%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222.2 84% 4.9%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222.2 84% 4.9%);
+  --primary: hsl(221.2 83.2% 53.3%);
+  --primary-foreground: hsl(210 40% 98%);
+  --secondary: hsl(210 40% 96%);
+  --secondary-foreground: hsl(222.2 84% 4.9%);
+  --muted: hsl(210 40% 96%);
+  --muted-foreground: hsl(215.4 16.3% 46.9%);
+  --accent: hsl(210 40% 96%);
+  --accent-foreground: hsl(222.2 84% 4.9%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(214.3 31.8% 91.4%);
+  --input: hsl(214.3 31.8% 91.4%);
+  --ring: hsl(221.2 83.2% 53.3%);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(222.2 84% 4.9%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(222.2 84% 4.9%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(222.2 84% 4.9%);
+  --popover-foreground: hsl(210 40% 98%);
+  --primary: hsl(210 40% 98%);
+  --primary-foreground: hsl(222.2 84% 4.9%);
+  --secondary: hsl(217.2 32.6% 17.5%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(217.2 32.6% 17.5%);
+  --muted-foreground: hsl(215 20.2% 65.1%);
+  --accent: hsl(217.2 32.6% 17.5%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(217.2 32.6% 17.5%);
+  --input: hsl(217.2 32.6% 17.5%);
+  --ring: hsl(224.3 76.3% 94.1%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
