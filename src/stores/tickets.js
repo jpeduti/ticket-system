@@ -477,6 +477,124 @@ export const useTicketsStore = defineStore('tickets', () => {
     }
   }
 
+  // Obtener estadísticas de tickets por categoría
+  const getTicketStatsByCategory = async () => {
+    try {
+      if (isMockMode) {
+        // Modo mock
+        const ticketsData = getLocalTickets()
+        
+        const categoryStats = {
+          login_problem: ticketsData.filter(t => t.category === 'login_problem').length,
+          new_user: ticketsData.filter(t => t.category === 'new_user').length,
+          user_modification: ticketsData.filter(t => t.category === 'user_modification').length,
+          usability_problem: ticketsData.filter(t => t.category === 'usability_problem').length,
+          technical_issue: ticketsData.filter(t => t.category === 'technical_issue').length,
+          feature_request: ticketsData.filter(t => t.category === 'feature_request').length,
+          other: ticketsData.filter(t => t.category === 'other' || !t.category).length,
+        }
+
+        return categoryStats
+      } else {
+        // Modo real con Supabase
+        const { data, error: statsError } = await supabase
+          .from('tickets')
+          .select('category')
+
+        if (statsError) throw statsError
+
+        const categoryStats = {
+          login_problem: data.filter(t => t.category === 'login_problem').length,
+          new_user: data.filter(t => t.category === 'new_user').length,
+          user_modification: data.filter(t => t.category === 'user_modification').length,
+          usability_problem: data.filter(t => t.category === 'usability_problem').length,
+          technical_issue: data.filter(t => t.category === 'technical_issue').length,
+          feature_request: data.filter(t => t.category === 'feature_request').length,
+          other: data.filter(t => t.category === 'other' || !t.category).length,
+        }
+
+        return categoryStats
+      }
+    } catch (err) {
+      console.error('Error obteniendo estadísticas por categoría:', err)
+      return null
+    }
+  }
+
+  // Obtener estadísticas de tickets por categoría para una empresa específica
+  const getTicketStatsByCategoryForCompany = async (companyId) => {
+    try {
+      if (isMockMode) {
+        // Modo mock
+        const ticketsData = getLocalTickets()
+        // Obtener todos los clientes de la empresa
+        const companyClients = mockClients.filter(client => client.company_id === companyId)
+        const companyClientIds = companyClients.map(client => client.id)
+        
+        // Filtrar tickets que pertenecen a clientes de esta empresa
+        const companyTickets = ticketsData.filter(ticket => companyClientIds.includes(ticket.client_id))
+        
+        const categoryStats = {
+          login_problem: companyTickets.filter(t => t.category === 'login_problem').length,
+          new_user: companyTickets.filter(t => t.category === 'new_user').length,
+          user_modification: companyTickets.filter(t => t.category === 'user_modification').length,
+          usability_problem: companyTickets.filter(t => t.category === 'usability_problem').length,
+          technical_issue: companyTickets.filter(t => t.category === 'technical_issue').length,
+          feature_request: companyTickets.filter(t => t.category === 'feature_request').length,
+          other: companyTickets.filter(t => t.category === 'other' || !t.category).length,
+        }
+
+        return categoryStats
+      } else {
+        // Modo real con Supabase
+        // Primero obtener todos los clientes de la empresa
+        const { data: companyClients, error: clientsError } = await supabase
+          .from('clients')
+          .select('id')
+          .eq('company_id', companyId)
+
+        if (clientsError) throw clientsError
+
+        const clientIds = companyClients.map(client => client.id)
+        
+        if (clientIds.length === 0) {
+          return {
+            login_problem: 0,
+            new_user: 0,
+            user_modification: 0,
+            usability_problem: 0,
+            technical_issue: 0,
+            feature_request: 0,
+            other: 0,
+          }
+        }
+
+        // Obtener tickets de todos los clientes de la empresa
+        const { data, error: statsError } = await supabase
+          .from('tickets')
+          .select('category')
+          .in('client_id', clientIds)
+
+        if (statsError) throw statsError
+
+        const categoryStats = {
+          login_problem: data.filter(t => t.category === 'login_problem').length,
+          new_user: data.filter(t => t.category === 'new_user').length,
+          user_modification: data.filter(t => t.category === 'user_modification').length,
+          usability_problem: data.filter(t => t.category === 'usability_problem').length,
+          technical_issue: data.filter(t => t.category === 'technical_issue').length,
+          feature_request: data.filter(t => t.category === 'feature_request').length,
+          other: data.filter(t => t.category === 'other' || !t.category).length,
+        }
+
+        return categoryStats
+      }
+    } catch (err) {
+      console.error('Error obteniendo estadísticas por categoría para empresa:', err)
+      return null
+    }
+  }
+
   // Inicializar datos mock inmediatamente si es necesario
   if (isMockMode) {
     const initializeData = () => {
@@ -501,6 +619,8 @@ export const useTicketsStore = defineStore('tickets', () => {
     deleteTicket,
     getTicketStats,
     getTicketStatsByCompany,
+    getTicketStatsByCategory,
+    getTicketStatsByCategoryForCompany,
     isMockMode
   }
 }) 

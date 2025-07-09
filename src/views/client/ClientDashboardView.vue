@@ -108,6 +108,14 @@
           </Card>
         </div>
 
+        <!-- Métricas por Categoría -->
+        <div class="mb-8">
+          <CategoryMetrics 
+            :category-stats="categoryStats"
+            @refresh="refreshCategoryStats"
+          />
+        </div>
+
         <!-- Tickets recientes de la empresa -->
         <Card>
           <CardHeader>
@@ -184,12 +192,15 @@ import ClientNavBar from '@/components/client/ClientNavBar.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Ticket as TicketIcon, Users, AlertCircle, CheckCircle, Clock, TrendingUp } from 'lucide-vue-next'
+import CategoryMetrics from '@/components/CategoryMetrics.vue'
 
 const authStore = useAuthStore()
 const ticketsStore = useTicketsStore()
 
 const stats = ref<TicketStats | null>(null)
 const companyTickets = ref<Ticket[]>([])
+const categoryStats = ref<Record<string, number> | null>(null)
 
 // Información del cliente logueado
 const clientUser = computed(() => authStore.user as ClientUser)
@@ -204,6 +215,20 @@ const recentTickets = computed(() => {
     .slice(0, 5)
 })
 
+const loadCategoryStats = async () => {
+  if (clientUser.value?.client_data?.company_id) {
+    try {
+      categoryStats.value = await ticketsStore.getTicketStatsByCategoryForCompany(clientUser.value.client_data.company_id)
+    } catch (error) {
+      console.error('Error cargando estadísticas por categoría:', error)
+    }
+  }
+}
+
+const refreshCategoryStats = async () => {
+  await loadCategoryStats()
+}
+
 // Cargar datos de la empresa
 onMounted(async () => {
   if (clientUser.value?.client_data?.company_id) {
@@ -212,6 +237,9 @@ onMounted(async () => {
     
     // Obtener estadísticas de la empresa
     stats.value = await ticketsStore.getTicketStatsByCompany(clientUser.value.client_data.company_id)
+    
+    // Cargar estadísticas por categoría
+    await loadCategoryStats()
   }
 })
 

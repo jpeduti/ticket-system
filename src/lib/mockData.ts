@@ -152,7 +152,8 @@ export const mockTickets: Ticket[] = [
     assigned_to: null,
     created_at: '2024-07-03T08:30:00Z',
     updated_at: '2024-07-03T08:30:00Z',
-    client: mockClients[0]
+    client: mockClients[0],
+    category: 'technical_issue'
   },
   {
     id: 2,
@@ -165,7 +166,8 @@ export const mockTickets: Ticket[] = [
     created_at: '2024-06-15T09:00:00Z',
     updated_at: '2024-06-30T17:30:00Z',
     client: mockClients[0],
-    assigned_user: { email: 'admin@empresa.com' }
+    assigned_user: { email: 'admin@empresa.com' },
+    category: 'technical_issue'
   },
   {
     id: 3,
@@ -177,7 +179,8 @@ export const mockTickets: Ticket[] = [
     assigned_to: null,
     created_at: '2024-07-04T09:30:00Z',
     updated_at: '2024-07-04T09:30:00Z',
-    client: mockClients[5]
+    client: mockClients[5],
+    category: 'feature_request'
   },
   {
     id: 4,
@@ -190,7 +193,8 @@ export const mockTickets: Ticket[] = [
     created_at: '2024-07-02T14:20:00Z',
     updated_at: '2024-07-03T10:15:00Z',
     client: mockClients[0],
-    assigned_user: { email: 'dev@empresa.com' }
+    assigned_user: { email: 'dev@empresa.com' },
+    category: 'technical_issue'
   },
   {
     id: 5,
@@ -202,7 +206,8 @@ export const mockTickets: Ticket[] = [
     assigned_to: null,
     created_at: '2024-07-01T16:45:00Z',
     updated_at: '2024-07-01T16:45:00Z',
-    client: mockClients[5]
+    client: mockClients[5],
+    category: 'feature_request'
   },
   {
     id: 6,
@@ -215,7 +220,8 @@ export const mockTickets: Ticket[] = [
     created_at: '2024-06-28T11:30:00Z',
     updated_at: '2024-07-01T09:20:00Z',
     client: mockClients[0],
-    assigned_user: { email: 'support@empresa.com' }
+    assigned_user: { email: 'support@empresa.com' },
+    category: 'technical_issue'
   },
   {
     id: 7,
@@ -228,7 +234,8 @@ export const mockTickets: Ticket[] = [
     created_at: '2024-06-20T08:15:00Z',
     updated_at: '2024-06-25T14:30:00Z',
     client: mockClients[5],
-    assigned_user: { email: 'dba@empresa.com' }
+    assigned_user: { email: 'dba@empresa.com' },
+    category: 'technical_issue'
   },
   {
     id: 8,
@@ -240,7 +247,8 @@ export const mockTickets: Ticket[] = [
     assigned_to: null,
     created_at: '2024-07-04T07:00:00Z',
     updated_at: '2024-07-04T07:00:00Z',
-    client: mockClients[0]
+    client: mockClients[0],
+    category: 'technical_issue'
   },
   {
     id: 9,
@@ -253,7 +261,8 @@ export const mockTickets: Ticket[] = [
     created_at: '2024-06-30T10:00:00Z',
     updated_at: '2024-07-02T15:30:00Z',
     client: mockClients[5],
-    assigned_user: { email: 'security@empresa.com' }
+    assigned_user: { email: 'security@empresa.com' },
+    category: 'feature_request'
   },
   {
     id: 10,
@@ -265,7 +274,8 @@ export const mockTickets: Ticket[] = [
     assigned_to: null,
     created_at: '2024-07-03T13:45:00Z',
     updated_at: '2024-07-03T13:45:00Z',
-    client: mockClients[0]
+    client: mockClients[0],
+    category: 'technical_issue'
   },
   {
     id: 11,
@@ -405,7 +415,8 @@ export const mockTickets: Ticket[] = [
     created_at: '2024-07-01T14:20:00Z',
     updated_at: '2024-07-02T16:45:00Z',
     client: mockClients[1],
-    assigned_user: { email: 'desarrollador@empresa.com' }
+    assigned_user: { email: 'desarrollador@empresa.com' },
+    category: 'feature_request'
   },
   {
     id: 22,
@@ -418,7 +429,8 @@ export const mockTickets: Ticket[] = [
     created_at: '2024-07-03T12:30:00Z',
     updated_at: '2024-07-03T12:30:00Z',
     client: mockClients[1],
-    assigned_user: { email: 'support@empresa.com' }
+    assigned_user: { email: 'support@empresa.com' },
+    category: 'technical_issue'
   },
   {
     id: 23,
@@ -443,7 +455,8 @@ export const mockTickets: Ticket[] = [
     assigned_to: null,
     created_at: '2024-07-02T09:45:00Z',
     updated_at: '2024-07-02T09:45:00Z',
-    client: mockClients[1]
+    client: mockClients[1],
+    category: 'technical_issue'
   },
   {
     id: 25,
@@ -469,7 +482,8 @@ export const mockTickets: Ticket[] = [
     created_at: '2024-06-30T13:15:00Z',
     updated_at: '2024-07-03T11:45:00Z',
     client: mockClients[1],
-    assigned_user: { email: 'frontend@empresa.com' }
+    assigned_user: { email: 'frontend@empresa.com' },
+    category: 'feature_request'
   },
   {
     id: 27,
