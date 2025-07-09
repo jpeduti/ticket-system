@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <NavBar />
+    <AdminNavBar />
     
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <!-- Header -->
@@ -146,7 +146,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useTicketsStore } from '@/stores/tickets'
 import { Ticket, CheckCircle, Clock, AlertCircle } from 'lucide-vue-next'
 
-import NavBar from '@/components/NavBar.vue'
+import AdminNavBar from '@/components/AdminNavBar.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 

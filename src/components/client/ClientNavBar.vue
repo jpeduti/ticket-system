@@ -31,6 +31,13 @@
               Mis Tickets
             </RouterLink>
             <RouterLink
+              to="/client/tickets/create"
+              class="text-indigo-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              active-class="text-white bg-indigo-700"
+            >
+              Crear Ticket
+            </RouterLink>
+            <RouterLink
               to="/client/profile"
               class="text-indigo-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-white bg-indigo-700"
@@ -109,6 +116,14 @@
           Mis Tickets
         </RouterLink>
         <RouterLink
+          to="/client/tickets/create"
+          class="text-indigo-100 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+          active-class="text-white bg-indigo-800"
+          @click="mobileMenuOpen = false"
+        >
+          Crear Ticket
+        </RouterLink>
+        <RouterLink
           to="/client/profile"
           class="text-indigo-100 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
           active-class="text-white bg-indigo-800"
@@ -148,7 +163,7 @@ const mobileMenuOpen = ref(false)
 const clientUser = computed(() => authStore.user as ClientUser)
 const clientName = computed(() => clientUser.value?.client_data?.name || clientUser.value?.user_metadata?.name || 'Cliente')
 const clientEmail = computed(() => clientUser.value?.email || '')
-const clientCompany = computed(() => clientUser.value?.client_data?.company || '')
+const clientCompany = computed(() => clientUser.value?.client_data?.company?.name || '')
 
 const userInitials = computed(() => {
   const name = clientName.value

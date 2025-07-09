@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <NavBar />
+    <AdminNavBar />
     
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div class="px-4 py-6 sm:px-0">
@@ -161,7 +161,7 @@ import { useTicketsStore } from '@/stores/tickets'
 import { toast } from 'vue-sonner'
 import { Plus, MoreHorizontal, Eye, Edit, Trash2 } from 'lucide-vue-next'
 
-import NavBar from '@/components/NavBar.vue'
+import AdminNavBar from '@/components/AdminNavBar.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

@@ -6,16 +6,24 @@
       <div class="px-4 py-6 sm:px-0">
         <!-- Header -->
         <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900">Mis Tickets</h1>
-          <p class="text-gray-600">Revisa el estado de todos tus tickets de soporte</p>
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-3xl font-bold text-gray-900">Tickets de {{ clientCompany }}</h1>
+              <p class="text-gray-600">Revisa el estado de todos los tickets de soporte de tu empresa</p>
+            </div>
+            <Button @click="$router.push('/client/tickets/create')" class="bg-indigo-600 hover:bg-indigo-700">
+              <Plus class="h-4 w-4 mr-2" />
+              Nuevo Ticket
+            </Button>
+          </div>
         </div>
 
         <!-- Lista de tickets -->
         <Card>
           <CardHeader>
-            <CardTitle>Todos mis tickets</CardTitle>
+            <CardTitle>Todos los tickets de {{ clientCompany }}</CardTitle>
             <CardDescription>
-              {{ clientTickets.length }} tickets encontrados
+              {{ companyTickets.length }} tickets encontrados
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -23,9 +31,14 @@
               <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
             </div>
             
-            <div v-else-if="clientTickets.length === 0" class="text-center py-8 text-gray-500">
-              <div class="text-4xl mb-4">🎫</div>
-              <p>No tienes tickets registrados</p>
+            <div v-else-if="companyTickets.length === 0" class="text-center py-12 text-gray-500">
+              <div class="text-6xl mb-4">🎫</div>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">No hay tickets registrados para tu empresa</h3>
+              <p class="text-sm mb-6">¡Crea tu primer ticket de soporte para comenzar!</p>
+              <Button @click="$router.push('/client/tickets/create')" class="bg-indigo-600 hover:bg-indigo-700">
+                <Plus class="h-4 w-4 mr-2" />
+                Crear mi primer ticket
+              </Button>
             </div>
             
             <div v-else class="space-y-4">
@@ -44,6 +57,9 @@
                       {{ ticket.description }}
                     </p>
                     <div class="flex items-center mt-2 space-x-4">
+                      <span class="text-xs text-gray-500">
+                        Cliente: {{ ticket.client?.name || 'N/A' }}
+                      </span>
                       <Badge :variant="getStatusVariant(ticket.status)">
                         {{ getStatusLabel(ticket.status) }}
                       </Badge>
@@ -74,28 +90,31 @@ import type { Ticket, ClientUser } from '@/types'
 import ClientNavBar from '@/components/client/ClientNavBar.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Plus } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const ticketsStore = useTicketsStore()
 
 const loading = ref(false)
-const clientTickets = ref<Ticket[]>([])
+const companyTickets = ref<Ticket[]>([])
 
 // Información del cliente logueado
 const clientUser = computed(() => authStore.user as ClientUser)
+const clientCompany = computed(() => clientUser.value?.client_data?.company?.name || 'Tu Empresa')
 
 // Tickets ordenados por fecha (más recientes primero)
 const sortedTickets = computed(() => {
-  return clientTickets.value
+  return companyTickets.value
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 })
 
-// Cargar tickets del cliente
+// Cargar tickets de la empresa
 onMounted(async () => {
-  if (clientUser.value?.client_id) {
+  if (clientUser.value?.client_data?.company_id) {
     loading.value = true
     try {
-      clientTickets.value = await ticketsStore.fetchTicketsByClient(clientUser.value.client_id)
+      companyTickets.value = await ticketsStore.fetchTicketsByCompany(clientUser.value.client_data.company_id)
     } finally {
       loading.value = false
     }

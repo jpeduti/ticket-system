@@ -13,11 +13,11 @@
             {{ clientCompany ? `${clientCompany} - ` : '' }}{{ clientEmail }}
           </p>
           <p class="text-sm text-gray-500 mt-1">
-            Aquí puedes revisar el estado de todos tus tickets de soporte
+            Aquí puedes revisar el estado de todos los tickets de soporte de tu empresa
           </p>
         </div>
 
-        <!-- Estadísticas de tickets del cliente -->
+        <!-- Estadísticas de tickets de la empresa -->
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <Card>
             <CardContent class="p-6">
@@ -108,14 +108,14 @@
           </Card>
         </div>
 
-        <!-- Tickets recientes -->
+        <!-- Tickets recientes de la empresa -->
         <Card>
           <CardHeader>
             <div class="flex items-center justify-between">
               <div>
-                <CardTitle>Mis Tickets Recientes</CardTitle>
+                <CardTitle>Tickets Recientes de {{ clientCompany }}</CardTitle>
                 <CardDescription>
-                  Los últimos tickets que has creado
+                  Los últimos tickets de tu empresa
                 </CardDescription>
               </div>
               <Button @click="$router.push('/client/tickets')">
@@ -130,8 +130,8 @@
             
             <div v-else-if="recentTickets.length === 0" class="text-center py-8 text-gray-500">
               <div class="text-4xl mb-4">🎫</div>
-              <p>No tienes tickets registrados aún</p>
-              <p class="text-sm mt-2">Los tickets que crees aparecerán aquí</p>
+              <p>No hay tickets registrados para tu empresa</p>
+              <p class="text-sm mt-2">Los tickets de tu empresa aparecerán aquí</p>
             </div>
             
             <div v-else class="space-y-4">
@@ -150,6 +150,9 @@
                       {{ ticket.description }}
                     </p>
                     <div class="flex items-center mt-2 space-x-4">
+                      <span class="text-xs text-gray-500">
+                        Cliente: {{ ticket.client?.name || 'N/A' }}
+                      </span>
                       <Badge :variant="getStatusVariant(ticket.status)">
                         {{ getStatusLabel(ticket.status) }}
                       </Badge>
@@ -186,37 +189,29 @@ const authStore = useAuthStore()
 const ticketsStore = useTicketsStore()
 
 const stats = ref<TicketStats | null>(null)
-const clientTickets = ref<Ticket[]>([])
+const companyTickets = ref<Ticket[]>([])
 
 // Información del cliente logueado
 const clientUser = computed(() => authStore.user as ClientUser)
 const clientName = computed(() => clientUser.value?.client_data?.name || clientUser.value?.user_metadata?.name || 'Cliente')
 const clientEmail = computed(() => clientUser.value?.email || '')
-const clientCompany = computed(() => clientUser.value?.client_data?.company || '')
+const clientCompany = computed(() => clientUser.value?.client_data?.company?.name || '')
 
 // Tickets recientes (últimos 5)
 const recentTickets = computed(() => {
-  return clientTickets.value
+  return companyTickets.value
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 5)
 })
 
-// Cargar datos del cliente
+// Cargar datos de la empresa
 onMounted(async () => {
-  if (clientUser.value?.client_id) {
-    // Cargar tickets del cliente
-    clientTickets.value = await ticketsStore.fetchTicketsByClient(clientUser.value.client_id)
+  if (clientUser.value?.client_data?.company_id) {
+    // Cargar tickets de la empresa
+    companyTickets.value = await ticketsStore.fetchTicketsByCompany(clientUser.value.client_data.company_id)
     
-    // Calcular estadísticas
-    stats.value = {
-      total: clientTickets.value.length,
-      open: clientTickets.value.filter(t => t.status === 'open').length,
-      in_progress: clientTickets.value.filter(t => t.status === 'in_progress').length,
-      closed: clientTickets.value.filter(t => t.status === 'closed').length,
-      high_priority: clientTickets.value.filter(t => t.priority === 'high').length,
-      medium_priority: clientTickets.value.filter(t => t.priority === 'medium').length,
-      low_priority: clientTickets.value.filter(t => t.priority === 'low').length,
-    }
+    // Obtener estadísticas de la empresa
+    stats.value = await ticketsStore.getTicketStatsByCompany(clientUser.value.client_data.company_id)
   }
 })
 

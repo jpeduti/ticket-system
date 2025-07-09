@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <NavBar />
+    <AdminNavBar />
     
     <main class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
       <div class="px-4 py-6 sm:px-0">
@@ -183,7 +183,7 @@ import { useClientsStore } from '@/stores/clients'
 import { toast } from 'vue-sonner'
 import { ArrowLeft } from 'lucide-vue-next'
 
-import NavBar from '@/components/NavBar.vue'
+import AdminNavBar from '@/components/AdminNavBar.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

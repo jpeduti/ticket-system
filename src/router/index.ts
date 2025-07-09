@@ -13,6 +13,7 @@ const ClientsView = () => import('@/views/ClientsView.vue')
 const ClientLoginView = () => import('@/views/client/ClientLoginView.vue')
 const ClientDashboardView = () => import('@/views/client/ClientDashboardView.vue')
 const ClientTicketsView = () => import('@/views/client/ClientTicketsView.vue')
+const ClientCreateTicketView = () => import('@/views/client/ClientCreateTicketView.vue')
 const ClientProfileView = () => import('@/views/client/ClientProfileView.vue')
 
 const routes: RouteRecordRaw[] = [
@@ -54,6 +55,12 @@ const routes: RouteRecordRaw[] = [
     path: '/client/profile',
     name: 'client-profile',
     component: ClientProfileView,
+    meta: { requiresAuth: true, userType: 'client' }
+  },
+  {
+    path: '/client/tickets/create',
+    name: 'client-create-ticket',
+    component: ClientCreateTicketView,
     meta: { requiresAuth: true, userType: 'client' }
   },
 

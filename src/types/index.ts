@@ -2,15 +2,29 @@
 // TIPOS DEL DOMINIO
 // ================================
 
+export interface Company {
+  id: number
+  name: string
+  description?: string | null
+  contact_email?: string | null
+  contact_phone?: string | null
+  address?: string | null
+  website?: string | null
+  created_at: string
+  updated_at: string
+}
+
 export interface Client {
   id: number
   name: string
   email: string
   phone?: string | null
-  company?: string | null
+  company_id: number
   address?: string | null
   created_at: string
   updated_at: string
+  // Relaciones
+  company?: Company
 }
 
 export interface Ticket {
@@ -23,6 +37,10 @@ export interface Ticket {
   assigned_to?: string | null
   created_at: string
   updated_at: string
+  category?: string
+  affected_user?: string
+  operating_system?: string
+  browser?: string
   // Relaciones
   client?: Client
   assigned_user?: { email: string }
@@ -39,8 +57,17 @@ export interface CreateClientData {
   name: string
   email: string
   phone?: string
-  company?: string
+  company_id: number
   address?: string
+}
+
+export interface CreateCompanyData {
+  name: string
+  description?: string
+  contact_email?: string
+  contact_phone?: string
+  address?: string
+  website?: string
 }
 
 export interface CreateTicketData {
@@ -49,6 +76,10 @@ export interface CreateTicketData {
   priority: TicketPriority
   client_id: number
   assigned_to?: string | null
+  category?: string
+  affected_user?: string
+  operating_system?: string
+  browser?: string
 }
 
 export interface UpdateTicketData {

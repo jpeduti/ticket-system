@@ -36,29 +36,73 @@
               </div>
               
               <div>
-                <Label class="text-sm font-medium text-gray-700">Empresa</Label>
-                <p class="mt-1 text-sm text-gray-900">{{ clientData?.company || 'No registrada' }}</p>
+                <Label class="text-sm font-medium text-gray-700">Cliente desde</Label>
+                <p class="mt-1 text-sm text-gray-900">{{ formatDate(clientData?.created_at) }}</p>
               </div>
               
               <div class="md:col-span-2">
-                <Label class="text-sm font-medium text-gray-700">Dirección</Label>
+                <Label class="text-sm font-medium text-gray-700">Dirección Personal</Label>
                 <p class="mt-1 text-sm text-gray-900">{{ clientData?.address || 'No registrada' }}</p>
-              </div>
-              
-              <div>
-                <Label class="text-sm font-medium text-gray-700">Cliente desde</Label>
-                <p class="mt-1 text-sm text-gray-900">{{ formatDate(clientData?.created_at) }}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <!-- Estadísticas del cliente -->
+        <!-- Información de la empresa -->
         <Card class="mt-6">
           <CardHeader>
-            <CardTitle>Mis Estadísticas</CardTitle>
+            <CardTitle>Información de la Empresa</CardTitle>
             <CardDescription>
-              Resumen de tu actividad en el sistema
+              Datos de tu empresa en el sistema
+            </CardDescription>
+          </CardHeader>
+          <CardContent class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <Label class="text-sm font-medium text-gray-700">Nombre de la Empresa</Label>
+                <p class="mt-1 text-sm text-gray-900 font-medium">{{ companyData?.name || 'No disponible' }}</p>
+              </div>
+              
+              <div>
+                <Label class="text-sm font-medium text-gray-700">Email de Contacto</Label>
+                <p class="mt-1 text-sm text-gray-900">{{ companyData?.contact_email || 'No registrado' }}</p>
+              </div>
+              
+              <div>
+                <Label class="text-sm font-medium text-gray-700">Teléfono de Contacto</Label>
+                <p class="mt-1 text-sm text-gray-900">{{ companyData?.contact_phone || 'No registrado' }}</p>
+              </div>
+              
+              <div>
+                <Label class="text-sm font-medium text-gray-700">Sitio Web</Label>
+                <p class="mt-1 text-sm text-gray-900">
+                  <a v-if="companyData?.website" :href="companyData.website" target="_blank" 
+                     class="text-blue-600 hover:text-blue-800 underline">
+                    {{ companyData.website }}
+                  </a>
+                  <span v-else>No registrado</span>
+                </p>
+              </div>
+              
+              <div class="md:col-span-2">
+                <Label class="text-sm font-medium text-gray-700">Descripción</Label>
+                <p class="mt-1 text-sm text-gray-900">{{ companyData?.description || 'No disponible' }}</p>
+              </div>
+              
+              <div class="md:col-span-2">
+                <Label class="text-sm font-medium text-gray-700">Dirección de la Empresa</Label>
+                <p class="mt-1 text-sm text-gray-900">{{ companyData?.address || 'No registrada' }}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <!-- Estadísticas de la empresa -->
+        <Card class="mt-6">
+          <CardHeader>
+            <CardTitle>Estadísticas de {{ companyData?.name || 'Tu Empresa' }}</CardTitle>
+            <CardDescription>
+              Resumen de la actividad de tu empresa en el sistema
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -121,22 +165,14 @@ const stats = ref<TicketStats | null>(null)
 const clientUser = computed(() => authStore.user as ClientUser)
 const clientData = computed(() => clientUser.value?.client_data)
 
-// Cargar estadísticas del cliente
+// Información de la empresa (si existe)
+const companyData = computed(() => clientUser.value?.client_data?.company)
+
+// Cargar estadísticas de la empresa
 onMounted(async () => {
-  if (clientUser.value?.client_id) {
-    // Cargar tickets del cliente para estadísticas
-    const clientTickets: Ticket[] = await ticketsStore.fetchTicketsByClient(clientUser.value.client_id)
-    
-    // Calcular estadísticas
-    stats.value = {
-      total: clientTickets.length,
-      open: clientTickets.filter(t => t.status === 'open').length,
-      in_progress: clientTickets.filter(t => t.status === 'in_progress').length,
-      closed: clientTickets.filter(t => t.status === 'closed').length,
-      high_priority: clientTickets.filter(t => t.priority === 'high').length,
-      medium_priority: clientTickets.filter(t => t.priority === 'medium').length,
-      low_priority: clientTickets.filter(t => t.priority === 'low').length,
-    }
+  if (clientUser.value?.client_data?.company_id) {
+    // Obtener estadísticas de la empresa
+    stats.value = await ticketsStore.getTicketStatsByCompany(clientUser.value.client_data.company_id)
   }
 })
 
